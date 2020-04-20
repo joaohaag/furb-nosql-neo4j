@@ -2,24 +2,30 @@ Exercício 1- Retrieving Nodes
 Coloque os comandos utilizado em cada item a seguir:
 
 • Exercise 1.1: Retrieve all nodes from the database.
+
 MATCH (n) RETURN n
 
 • Exercise 1.2: Examine the data model for the graph.
+
 ---verificar
 
 • Exercise 1.3: Retrieve all Person nodes.
+
 MATCH (p:Person) RETURN p
 
 • Exercise 1.4: Retrieve all Movie nodes.Exercício 1- Retrieving Nodes
+
 MATCH (m:Movie) RETURN m
 
 Exercício 2 – Filtering queries using propertyvalues
 Coloque os comandos utilizado em cada item a seguir:
 
 • Exercise 2.1: Retrieve all movies that were released in a specific year.
+
 MATCH (m:Movie) where m.released = 2012 RETURN m
 
 • Exercise 2.2: View the retrieved results as a table.
+
 {
   "title": "Cloud Atlas",
   "tagline": "Everything is connected",
@@ -27,24 +33,46 @@ MATCH (m:Movie) where m.released = 2012 RETURN m
 }
 
 • Exercise 2.3: Query the database for all property keys.
+
 CALL db.propertyKeys
 
 • Exercise 2.4: Retrieve all Movies released in a specific year, returning their titles.
+
 MATCH (m:Movie) where m.released = 2006 RETURN m.title
 
 • Exercise 2.5: Display title, released, and tagline values for every Movie node in the graph.
+
 MATCH (m:Movie) RETURN m.title, m.released, m.tagline
 
 • Exercise 2.6: Display more user-friendly headers in the table
+
 MATCH (m:Movie) RETURN m.title as `Titulo`, m.released as `Lancamento`, m.tagline as `Slogan`
 
 Exercício 3 - Filtering queries using relationships
 Coloque os comandos utilizado em cada item a seguir:
+
 • Exercise 3.1: Display the schema of the database.
+
+CALL db.schema
+
 • Exercise 3.2: Retrieve all people who wrote the movie Speed Racer.
+
+MATCH (p:Person)-[:WROTE]->(m:Movie {
+title: 'Speed Racer'
+})
+RETURN p.name
+
 • Exercise 3.3: Retrieve all movies that are connected to the person, Tom Hanks.
+
+MATCH (m:Movie)<--(p:Person) WHERE p.name= 'Tom Hanks' RETURN m.title
+
 • Exercise 3.4: Retrieve information about the relationships Tom Hanks had with the set of movies retrieved earlier.
+
+MATCH (m:Movie)-[rel]-(p:Person) WHERE p.name= 'Tom Hanks' RETURN m.title, type(rel)
+
 • Exercise 3.5: Retrieve information about the roles that Tom Hanks acted in.
+
+MATCH (m:Movie)-[rel:ACTED_IN]-(p:Person) WHERE p.name= 'Tom Hanks' RETURN m.title, rel.roles
 
 Exercício 4 – Filtering queries using WHERE clause
 Coloque os comandos utilizado em cada item a seguir:
