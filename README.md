@@ -57,32 +57,56 @@ CALL db.schema
 
 • Exercise 3.2: Retrieve all people who wrote the movie Speed Racer.
 
-MATCH (p:Person)-[:WROTE]->(m:Movie {
-title: 'Speed Racer'
-})
-RETURN p.name
+MATCH (p:Person)-[:WROTE]->(m:Movie {title: 'Speed Racer'}) RETURN p.name
 
 • Exercise 3.3: Retrieve all movies that are connected to the person, Tom Hanks.
 
-MATCH (m:Movie)<--(p:Person) WHERE p.name= 'Tom Hanks' RETURN m.title
+MATCH (m:Movie)<--(p:Person {name: 'Tom Hanks'}) RETURN m.title
 
 • Exercise 3.4: Retrieve information about the relationships Tom Hanks had with the set of movies retrieved earlier.
 
-MATCH (m:Movie)-[rel]-(p:Person) WHERE p.name= 'Tom Hanks' RETURN m.title, type(rel)
+MATCH (m:Movie)-[rel]-(:Person {name: 'Tom Hanks'}) RETURN m.title, type(rel)
 
 • Exercise 3.5: Retrieve information about the roles that Tom Hanks acted in.
 
-MATCH (m:Movie)-[rel:ACTED_IN]-(p:Person) WHERE p.name= 'Tom Hanks' RETURN m.title, rel.roles
+MATCH (m:Movie)-[rel:ACTED_IN]-(:Person {name: 'Tom Hanks'}) RETURN m.title, rel.roles
 
 Exercício 4 – Filtering queries using WHERE clause
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 4.1: Retrieve all movies that Tom Cruise acted in.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE a.name = 'Tom Cruise' RETURN m.title as Movie
+
 • Exercise 4.2: Retrieve all people that were born in the 70’s.
+
+MATCH (p:Person) WHERE p.born >= 1970 AND p.born < 1980  RETURN p.name, p.born
+
 • Exercise 4.3: Retrieve the actors who acted in the movie The Matrix who were born after 1960.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WHERE p.born > 1960 AND m.title = 'The Matrix' RETURN p.name, p.born, m.title
+
 • Exercise 4.4: Retrieve all movies by testing the node label and a property.
+
+MATCH (m) WHERE m:Movie AND m.title =~ 'The.*' RETURN m.title
+
 • Exercise 4.5: Retrieve all people that wrote movies by testing the relationship between two nodes.
+
+MATCH (a)-[rel]->(m)
+WHERE a:Person AND type(rel) = 'WROTE' AND m:Movie
+RETURN a.name as Name, m.title as Movie
+
 • Exercise 4.6: Retrieve all people in the graph that do not have a property.
+
+MATCH (p:Person)
+WHERE NOT exists (p.born)
+RETURN p.name
+
 • Exercise 4.7: Retrieve all people related to movies where the relationship has a property.
+
+MATCH (a:Person)-[rel]->(m:Movie)
+WHERE exists(rel.rating)
+RETURN a.name, m.title,  type(rel), rel.rating
+
 • Exercise 4.8: Retrieve all actors whose name begins with James.
 • Exercise 4.9: Retrieve all all REVIEW relationships from the graph with filtered results.
 • Exercise 4.10: Retrieve all people who have produced a movie, but have not directed a movie.
