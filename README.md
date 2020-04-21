@@ -161,6 +161,9 @@ MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  m, collect(m.title) as movies RETU
 MATCH (a:Person)-[:REVIEWED]->(m:Movie) WITH  m, count(a) AS qtd_revisores, collect(a.name) as revisores RETURN m.title, revisores, qtd_revisores
 
 • Exercise 5.10: Retrieve nodes and their relationships as lists.
+
+MATCH (a:Person)-[:DIRECTED]->(m:Movie)<-[:ACTED_IN]-(a2:Person) WITH  a, count(a2) AS qtd_atores, collect(a2.name) as Atores RETURN a.name as `Diretor`, Atores, qtd_atores
+
 • Exercise 5.11: Retrieve the actors who have acted in exactly five movies.
 • Exercise 5.12: Retrieve the movies that have at least 2 directors with other optional data.
 
