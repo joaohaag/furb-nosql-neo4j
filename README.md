@@ -91,28 +91,40 @@ MATCH (m) WHERE m:Movie AND m.title =~ 'The.*' RETURN m.title
 
 • Exercise 4.5: Retrieve all people that wrote movies by testing the relationship between two nodes.
 
-MATCH (a)-[rel]->(m)
-WHERE a:Person AND type(rel) = 'WROTE' AND m:Movie
-RETURN a.name as Name, m.title as Movie
+MATCH (a)-[rel]->(m) WHERE a:Person AND type(rel) = 'WROTE' AND m:Movie RETURN a.name as Name, m.title as Movie
 
 • Exercise 4.6: Retrieve all people in the graph that do not have a property.
 
-MATCH (p:Person)
-WHERE NOT exists (p.born)
-RETURN p.name
+MATCH (p:Person) WHERE NOT exists (p.born) RETURN p.name
 
 • Exercise 4.7: Retrieve all people related to movies where the relationship has a property.
 
-MATCH (a:Person)-[rel]->(m:Movie)
-WHERE exists(rel.rating)
-RETURN a.name, m.title,  type(rel), rel.rating
+MATCH (a:Person)-[rel]->(m:Movie) WHERE exists(rel.rating) RETURN a.name, m.title,  type(rel), rel.rating
 
 • Exercise 4.8: Retrieve all actors whose name begins with James.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WHERE p.name STARTS WITH 'James' RETURN p.name
+
 • Exercise 4.9: Retrieve all all REVIEW relationships from the graph with filtered results.
+
+MATCH (p:Person)-[:REVIEWED]->(m:Movie) WHERE p.name STARTS WITH 'James' RETURN p.name
+
 • Exercise 4.10: Retrieve all people who have produced a movie, but have not directed a movie.
+
+MATCH (a:Person)-[:PRODUCED]->(m:Movie) WHERE NOT ((a)-[:DIRECTED]->(:Movie)) RETURN a.name, m.title
+
 • Exercise 4.11: Retrieve the movies and their actors where one of the actors also directed the movie.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(a2:Person) WHERE exists((a2)-[:DIRECTED]->(m)) RETURN a.name, m.title, a2.name AS `Diretor`
+
 • Exercise 4.12: Retrieve all movies that were released in a set of years.
+
+MATCH (m:Movie) WHERE m.released IN [2008, 2005] RETURN  m.title, m.released
+
 • Exercise 4.13: Retrieve the movies that have an actor’s role that is the name of the movie.
+
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie) WHERE m.title in r.roles RETURN  m.title as Movie, a.name as Actor, r.roles
+
 
 Exercício 5 – Controlling query processing
 Coloque os comandos utilizado em cada item a seguir:
