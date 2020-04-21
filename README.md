@@ -129,13 +129,37 @@ MATCH (a:Person)-[r:ACTED_IN]->(m:Movie) WHERE m.title in r.roles RETURN  m.titl
 Exercício 5 – Controlling query processing
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 5.1: Retrieve data using multiple MATCH patterns.
+
+
+
 • Exercise 5.2: Retrieve particular nodes that have a relationship.
+
+MATCH (follower:Person)-[:FOLLOWS]-(p:Person) WHERE follower.name = 'James Thompson' RETURN follower, p
+
 • Exercise 5.3: Modify the query to retrieve nodes that are exactly three hops away.
+
+MATCH (follower:Person)-[:FOLLOWS*3]-(p:Person) RETURN follower, p
+
 • Exercise 5.4: Modify the query to retrieve nodes that are one and two hops away.
+
+MATCH (follower:Person)-[:FOLLOWS*1..2]-(p:Person) RETURN follower, p
+
 • Exercise 5.5: Modify the query to retrieve particular nodes that are connected no matter how many hops are required.
+
+MATCH (follower:Person)-[:FOLLOWS*]-(p:Person) WHERE follower.name = 'James Thompson' RETURN follower, p
+
 • Exercise 5.6: Specify optional data to be retrieved during the query.
+
+MATCH (p:Person) WHERE p.name STARTS WITH 'James' OPTIONAL MATCH (p)-[r:DIRECTED]->(m:Movie) RETURN p.name, type(r), m.title
+
 • Exercise 5.7: Retrieve nodes by collecting a list.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  m, collect(m.title) as movies RETURN a.name, movies
+
 • Exercise 5.9: Retrieve nodes as lists and return data associated with the corresponding lists.
+
+MATCH (a:Person)-[:REVIEWED]->(m:Movie) WITH  m, count(a) AS qtd_revisores, collect(a.name) as revisores RETURN m.title, revisores, qtd_revisores
+
 • Exercise 5.10: Retrieve nodes and their relationships as lists.
 • Exercise 5.11: Retrieve the actors who have acted in exactly five movies.
 • Exercise 5.12: Retrieve the movies that have at least 2 directors with other optional data.
