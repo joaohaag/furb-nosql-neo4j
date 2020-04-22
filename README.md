@@ -302,23 +302,112 @@ RETURN p.name, m.title, m.released, date().year - m.released AS Tempo_Lancamento
 Exercício 8 – Creating nodes
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 8.1: Create a Movie node.
+
+CREATE (:Movie {title: 'Forrest Gump'})
+
 • Exercise 8.2: Retrieve the newly-created node.
+
+MATCH (m:Movie) 
+WHERE m.title = 'Forrest Gump'
+RETURN m
+
 • Exercise 8.3: Create a Person node.
+
+CREATE (:Person {name: 'Robin Wright'})
+
 • Exercise 8.4: Retrieve the newly-created node.
+
+MATCH (p:Person) 
+WHERE p.name = 'Robin Wright'
+RETURN p
+
 • Exercise 8.5: Add a label to a node.
+
+MATCH (m:Movie)
+WHERE m.released < 2010
+SET m:OlderMovie
+RETURN labels(m)
+
 • Exercise 8.6: Retrieve the node using the new label.
+
+MATCH (m:OlderMovie)
+RETURN m.title, m.released
+
 • Exercise 8.7: Add the Female label to selected nodes.
+
+MATCH (p:Person)
+WHERE p.name STARTS WITH 'Robin' 
+SET p:Female
+RETURN labels(p)
+
 • Exercise 8.8: Retrieve all Female nodes.
+
+MATCH (f:Female)
+RETURN f
+
 • Exercise 8.9: Remove the Female label from the nodes that have this label.
+
+MATCH (f:Female)
+REMOVE f:Female
+
 • Exercise 8.10: View the current schema of the graph.
+
+Esse comando não funciona
+
+CALL db.schema
+
 • Exercise 8.11: Add properties to a movie.
+
+MATCH (m:Movie)
+WHERE m.title = 'Forrest Gump'
+SET m:OlderMovie, m.released = 1994, m.tagline = "Life is like a box of chocolates…you never know what you’re gonna get.", m.lengthInMinutes = 142
+RETURN m
+
 • Exercise 8.12: Retrieve an OlderMovie node to confirm the label and properties.
+
+MATCH (m:OlderMovie)
+WHERE m.title = 'Forrest Gump'
+RETURN m
+
 • Exercise 8.13: Add properties to the person, Robin Wright.
+
+MATCH (p:Person)
+WHERE p.name = 'Robin Wright'
+SET p.born = 1966, p.birthPlace = "Dallas"
+RETURN p
+
 • Exercise 8.14: Retrieve an updated Person node.
+
+MATCH (p:Person)
+WHERE p.name = 'Robin Wright'
+RETURN p
+
 • Exercise 8.15: Remove a property from a Movie node.
+
+MATCH (m:Movie)
+WHERE m.title = 'Forrest Gump'
+REMOVE m.lengthInMinutes
+RETURN m
+
 • Exercise 8.16: Retrieve the node to confirm that the property has been removed.
+
+MATCH (m:Movie)
+WHERE m.title = 'Forrest Gump'
+RETURN m
+
 • Exercise 8.17: Remove a property from a Person node.
+
+MATCH (p:Person)
+WHERE p.name = 'Robin Wright'
+REMOVE p.birthPlace
+RETURN p
+
 • Exercise 8.18: Retrieve the node to confirm that the property has been removed.
+
+MATCH (p:Person)
+WHERE p.name = 'Robin Wright'
+RETURN p
+
 
 Exercício 9 – Creating relationships
 Coloque os comandos utilizado em cada item a seguir:
