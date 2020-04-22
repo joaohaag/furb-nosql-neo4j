@@ -3,7 +3,8 @@ Coloque os comandos utilizado em cada item a seguir:
 
 • Exercise 1.1: Retrieve all nodes from the database.
 
-MATCH (n) RETURN n
+MATCH (n) 
+RETURN n
 
 • Exercise 1.2: Examine the data model for the graph.
 
@@ -11,11 +12,13 @@ MATCH (n) RETURN n
 
 • Exercise 1.3: Retrieve all Person nodes.
 
-MATCH (p:Person) RETURN p
+MATCH (p:Person) 
+RETURN p
 
 • Exercise 1.4: Retrieve all Movie nodes.Exercício 1- Retrieving Nodes
 
-MATCH (m:Movie) RETURN m
+MATCH (m:Movie) 
+RETURN m
 
 Exercício 2 – Filtering queries using propertyvalues
 Coloque os comandos utilizado em cada item a seguir:
@@ -38,15 +41,18 @@ CALL db.propertyKeys
 
 • Exercise 2.4: Retrieve all Movies released in a specific year, returning their titles.
 
-MATCH (m:Movie) where m.released = 2006 RETURN m.title
+MATCH (m:Movie) where m.released = 2006 
+RETURN m.title
 
 • Exercise 2.5: Display title, released, and tagline values for every Movie node in the graph.
 
-MATCH (m:Movie) RETURN m.title, m.released, m.tagline
+MATCH (m:Movie) 
+RETURN m.title, m.released, m.tagline
 
 • Exercise 2.6: Display more user-friendly headers in the table
 
-MATCH (m:Movie) RETURN m.title as `Titulo`, m.released as `Lancamento`, m.tagline as `Slogan`
+MATCH (m:Movie) 
+RETURN m.title as `Titulo`, m.released as `Lancamento`, m.tagline as `Slogan`
 
 Exercício 3 - Filtering queries using relationships
 Coloque os comandos utilizado em cada item a seguir:
@@ -57,73 +63,103 @@ CALL db.schema
 
 • Exercise 3.2: Retrieve all people who wrote the movie Speed Racer.
 
-MATCH (p:Person)-[:WROTE]->(m:Movie {title: 'Speed Racer'}) RETURN p.name
+MATCH (p:Person)-[:WROTE]->(m:Movie {title: 'Speed Racer'}) 
+RETURN p.name
 
 • Exercise 3.3: Retrieve all movies that are connected to the person, Tom Hanks.
 
-MATCH (m:Movie)<--(p:Person {name: 'Tom Hanks'}) RETURN m.title
+MATCH (m:Movie)<--(p:Person {name: 'Tom Hanks'}) 
+RETURN m.title
 
 • Exercise 3.4: Retrieve information about the relationships Tom Hanks had with the set of movies retrieved earlier.
 
-MATCH (m:Movie)-[rel]-(:Person {name: 'Tom Hanks'}) RETURN m.title, type(rel)
+MATCH (m:Movie)-[rel]-(:Person {name: 'Tom Hanks'}) 
+RETURN m.title, type(rel)
 
 • Exercise 3.5: Retrieve information about the roles that Tom Hanks acted in.
 
-MATCH (m:Movie)-[rel:ACTED_IN]-(:Person {name: 'Tom Hanks'}) RETURN m.title, rel.roles
+MATCH (m:Movie)-[rel:ACTED_IN]-(:Person {name: 'Tom Hanks'}) 
+RETURN m.title, rel.roles
 
 Exercício 4 – Filtering queries using WHERE clause
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 4.1: Retrieve all movies that Tom Cruise acted in.
 
-MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE a.name = 'Tom Cruise' RETURN m.title as Movie
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE a.name = 'Tom Cruise' 
+RETURN m.title as Movie
 
 • Exercise 4.2: Retrieve all people that were born in the 70’s.
 
-MATCH (p:Person) WHERE p.born >= 1970 AND p.born < 1980  RETURN p.name, p.born
+MATCH (p:Person) 
+WHERE p.born >= 1970 AND p.born < 1980  
+RETURN p.name, p.born
 
 • Exercise 4.3: Retrieve the actors who acted in the movie The Matrix who were born after 1960.
 
-MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WHERE p.born > 1960 AND m.title = 'The Matrix' RETURN p.name, p.born, m.title
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE p.born > 1960 AND m.title = 'The Matrix' 
+RETURN p.name, p.born, m.title
 
 • Exercise 4.4: Retrieve all movies by testing the node label and a property.
 
-MATCH (m) WHERE m:Movie AND m.title =~ 'The.*' RETURN m.title
+MATCH (m) 
+WHERE m:Movie AND m.title =~ 'The.*' 
+RETURN m.title
 
 • Exercise 4.5: Retrieve all people that wrote movies by testing the relationship between two nodes.
 
-MATCH (a)-[rel]->(m) WHERE a:Person AND type(rel) = 'WROTE' AND m:Movie RETURN a.name as Name, m.title as Movie
+MATCH (a)-[rel]->(m) 
+WHERE a:Person AND type(rel) = 'WROTE' AND m:Movie 
+RETURN a.name as Name, m.title as Movie
 
 • Exercise 4.6: Retrieve all people in the graph that do not have a property.
 
-MATCH (p:Person) WHERE NOT exists (p.born) RETURN p.name
+MATCH (p:Person) 
+WHERE NOT exists (p.born) 
+RETURN p.name
 
 • Exercise 4.7: Retrieve all people related to movies where the relationship has a property.
 
-MATCH (a:Person)-[rel]->(m:Movie) WHERE exists(rel.rating) RETURN a.name, m.title,  type(rel), rel.rating
+MATCH (a:Person)-[rel]->(m:Movie) 
+WHERE exists(rel.rating) 
+RETURN a.name, m.title,  type(rel), rel.rating
 
 • Exercise 4.8: Retrieve all actors whose name begins with James.
 
-MATCH (p:Person)-[:ACTED_IN]->(m:Movie) WHERE p.name STARTS WITH 'James' RETURN p.name
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE p.name STARTS WITH 'James' 
+RETURN p.name
 
 • Exercise 4.9: Retrieve all all REVIEW relationships from the graph with filtered results.
 
-MATCH (p:Person)-[:REVIEWED]->(m:Movie) WHERE p.name STARTS WITH 'James' RETURN p.name
+MATCH (p:Person)-[:REVIEWED]->(m:Movie) 
+WHERE p.name STARTS WITH 'James' 
+RETURN p.name
 
 • Exercise 4.10: Retrieve all people who have produced a movie, but have not directed a movie.
 
-MATCH (a:Person)-[:PRODUCED]->(m:Movie) WHERE NOT ((a)-[:DIRECTED]->(:Movie)) RETURN a.name, m.title
+MATCH (a:Person)-[:PRODUCED]->(m:Movie) 
+WHERE NOT ((a)-[:DIRECTED]->(:Movie)) 
+RETURN a.name, m.title
 
 • Exercise 4.11: Retrieve the movies and their actors where one of the actors also directed the movie.
 
-MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(a2:Person) WHERE exists((a2)-[:DIRECTED]->(m)) RETURN a.name, m.title, a2.name AS `Diretor`
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(a2:Person) 
+WHERE exists((a2)-[:DIRECTED]->(m)) 
+RETURN a.name, m.title, a2.name AS `Diretor`
 
 • Exercise 4.12: Retrieve all movies that were released in a set of years.
 
-MATCH (m:Movie) WHERE m.released IN [2008, 2005] RETURN  m.title, m.released
+MATCH (m:Movie) 
+WHERE m.released IN [2008, 2005] 
+RETURN  m.title, m.released
 
 • Exercise 4.13: Retrieve the movies that have an actor’s role that is the name of the movie.
 
-MATCH (a:Person)-[r:ACTED_IN]->(m:Movie) WHERE m.title in r.roles RETURN  m.title as Movie, a.name as Actor, r.roles
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie) 
+WHERE m.title in r.roles 
+RETURN  m.title as Movie, a.name as Actor, r.roles
 
 
 Exercício 5 – Controlling query processing
@@ -134,47 +170,104 @@ Coloque os comandos utilizado em cada item a seguir:
 
 • Exercise 5.2: Retrieve particular nodes that have a relationship.
 
-MATCH (follower:Person)-[:FOLLOWS]-(p:Person) WHERE follower.name = 'James Thompson' RETURN follower, p
+MATCH (follower:Person)-[:FOLLOWS]-(p:Person) 
+WHERE follower.name = 'James Thompson' 
+RETURN follower, p
 
 • Exercise 5.3: Modify the query to retrieve nodes that are exactly three hops away.
 
-MATCH (follower:Person)-[:FOLLOWS*3]-(p:Person) RETURN follower, p
+MATCH (follower:Person)-[:FOLLOWS*3]-(p:Person) 
+RETURN follower, p
 
 • Exercise 5.4: Modify the query to retrieve nodes that are one and two hops away.
 
-MATCH (follower:Person)-[:FOLLOWS*1..2]-(p:Person) RETURN follower, p
+MATCH (follower:Person)-[:FOLLOWS*1..2]-(p:Person) 
+RETURN follower, p
 
 • Exercise 5.5: Modify the query to retrieve particular nodes that are connected no matter how many hops are required.
 
-MATCH (follower:Person)-[:FOLLOWS*]-(p:Person) WHERE follower.name = 'James Thompson' RETURN follower, p
+MATCH (follower:Person)-[:FOLLOWS*]-(p:Person) 
+WHERE follower.name = 'James Thompson' 
+RETURN follower, p
 
 • Exercise 5.6: Specify optional data to be retrieved during the query.
 
-MATCH (p:Person) WHERE p.name STARTS WITH 'James' OPTIONAL MATCH (p)-[r:DIRECTED]->(m:Movie) RETURN p.name, type(r), m.title
+MATCH (p:Person) 
+WHERE p.name STARTS WITH 'James' 
+OPTIONAL MATCH (p)-[r:DIRECTED]->(m:Movie) 
+RETURN p.name, type(r), m.title
 
 • Exercise 5.7: Retrieve nodes by collecting a list.
 
-MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  m, collect(m.title) as movies RETURN a.name, movies
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) 
+WITH  m, collect(m.title) as movies 
+RETURN a.name, movies
 
 • Exercise 5.9: Retrieve nodes as lists and return data associated with the corresponding lists.
 
-MATCH (a:Person)-[:REVIEWED]->(m:Movie) WITH  m, count(a) AS qtd_revisores, collect(a.name) as revisores RETURN m.title, revisores, qtd_revisores
+MATCH (a:Person)-[:REVIEWED]->(m:Movie) 
+WITH  m, count(a) AS qtd_revisores, collect(a.name) as revisores 
+RETURN m.title, revisores, qtd_revisores
 
 • Exercise 5.10: Retrieve nodes and their relationships as lists.
 
-MATCH (a:Person)-[:DIRECTED]->(m:Movie)<-[:ACTED_IN]-(a2:Person) WITH  a, count(a2) AS qtd_atores, collect(a2.name) as Atores RETURN a.name as `Diretor`, Atores, qtd_atores
+MATCH (a:Person)-[:DIRECTED]->(m:Movie)<-[:ACTED_IN]-(a2:Person) 
+WITH a, count(a2) AS qtd_atores, collect(a2.name) as Atores 
+RETURN a.name as `Diretor`, Atores, qtd_atores
 
 • Exercise 5.11: Retrieve the actors who have acted in exactly five movies.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) 
+WITH  a, count(m) AS qtd_filmes 
+WHERE qtd_filmes = 5 RETURN a.name as `Ator`, qtd_filmes
+
 • Exercise 5.12: Retrieve the movies that have at least 2 directors with other optional data.
+
+MATCH (p:Person)-[:DIRECTED]->(m:Movie) 
+OPTIONAL MATCH (p2:Person)-[:REVIEWED]->(m)
+WITH  m, count(p) AS qtd_diretores, collect(p.name) as Diretores, collect(p2.name) as Revisores
+WHERE qtd_diretores = 2
+RETURN m.title,Diretores, Revisores
 
 Exercício 6 – Controlling results returned
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 6.1: Execute a query that returns duplicate records.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE m.released >= 1990 AND m.released < 2000
+RETURN m.released, m.title, p.name
+
 • Exercise 6.2: Modify the query to eliminate duplication.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE m.released >= 1990 AND m.released < 2000
+RETURN m.released, collect(m.title), collect(p.name)
+
 • Exercise 6.3: Modify the query to eliminate more duplication.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE m.released >= 1990 AND m.released < 2000
+RETURN m.released, collect(distinct m.title), collect(p.name)
+
 • Exercise 6.4: Sort results returned.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie) 
+WHERE m.released >= 1990 AND m.released < 2000
+RETURN m.released, collect(distinct m.title), collect(p.name)
+ORDER BY m.released DESC
+
 • Exercise 6.5: Retrieve the top 5 ratings and their associated movies.
+
+MATCH (:Person)-[r:REVIEWED]->(m:Movie)
+RETURN  m.title AS movie, r.rating AS rating
+ORDER BY r.rating DESC LIMIT 5
+
 • Exercise 6.6: Retrieve all actors that have not appeared in more than 3 movies.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) 
+WITH  a, count(m) AS qtd_filmes 
+WHERE qtd_filmes <= 3
+RETURN a.name as `Ator`, qtd_filmes
 
 Exercício 7 – Working with cypher data
 Coloque os comandos utilizado em cada item a seguir:
