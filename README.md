@@ -272,9 +272,32 @@ RETURN a.name as `Ator`, qtd_filmes
 Exercício 7 – Working with cypher data
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 7.1: Collect and use lists.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:PRODUCED]-(a2:Person) 
+WITH m, collect(distinct a.name) as Atores, collect(distinct a2.name) as Produtores 
+RETURN m.title, Atores, Produtores
+ORDER BY size(Atores)
+
 • Exercise 7.2: Collect a list.
+
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie) 
+WITH  a, collect(m.title) as Filmes 
+WHERE size(Filmes) > 5
+RETURN a.name as `Ator`, Filmes
+
 • Exercise 7.3: Unwind a list.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WITH p, collect(m) AS movies
+WHERE size(movies)  > 5
+WITH p, movies UNWIND movies AS movie
+RETURN p.name, movie.title
+
 • Exercise 7.4: Perform a calculation with the date type.
+
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WHERE p.name = 'Tom Hanks'
+RETURN p.name, m.title, m.released, date().year - m.released AS Tempo_Lancamento, m.released - p.born AS IdadeAtor
 
 Exercício 8 – Creating nodes
 Coloque os comandos utilizado em cada item a seguir:
