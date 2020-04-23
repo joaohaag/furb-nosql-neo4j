@@ -8,7 +8,7 @@ RETURN n
 
 • Exercise 1.2: Examine the data model for the graph.
 
----verificar
+CALL db.schema.visualization()
 
 • Exercise 1.3: Retrieve all Person nodes.
 
@@ -59,7 +59,7 @@ Coloque os comandos utilizado em cada item a seguir:
 
 • Exercise 3.1: Display the schema of the database.
 
-CALL db.schema
+CALL db.schema.visualization()
 
 • Exercise 3.2: Retrieve all people who wrote the movie Speed Racer.
 
@@ -166,7 +166,10 @@ Exercício 5 – Controlling query processing
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 5.1: Retrieve data using multiple MATCH patterns.
 
-
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person),
+      (a2:Person)-[:ACTED_IN]->(m)
+WHERE a.name = 'Gene Hackman'
+RETURN m.title as movie, d.name AS director , a2.name AS `co-actors`
 
 • Exercise 5.2: Retrieve particular nodes that have a relationship.
 
@@ -352,9 +355,7 @@ REMOVE f:Female
 
 • Exercise 8.10: View the current schema of the graph.
 
-Esse comando não funciona
-
-CALL db.schema
+CALL db.schema.visualization()
 
 • Exercise 8.11: Add properties to a movie.
 
@@ -412,27 +413,141 @@ RETURN p
 Exercício 9 – Creating relationships
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 9.1: Create ACTED_IN relationships.
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Robin Wright' AND m.title = 'Forrest Gump'
+CREATE (a)-[:ACTED_IN]->(m)
+RETURN a, m
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Tom Hanks' AND m.title = 'Forrest Gump'
+CREATE (a)-[:ACTED_IN]->(m)
+RETURN a, m
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Gary Sinise' AND m.title = 'Forrest Gump'
+CREATE (a)-[:ACTED_IN]->(m)
+RETURN a, m
+
 • Exercise 9.2: Create DIRECTED relationships.
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Robert Zemeckis' AND m.title = 'Forrest Gump'
+CREATE (a)-[:DIRECTED]->(m)
+RETURN a, m
+
 • Exercise 9.3: Create a HELPED relationship.
+
+MATCH (p1:Person)
+WHERE p1.name = 'Tom Hanks'
+MATCH (p2:Person)
+WHERE p2.name = 'Gary Sinise'
+CREATE (p1)-[:HELPED]->(p2)
+
 • Exercise 9.4: Query nodes and new relationships.
+
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE m.title = 'Forrest Gump'
+Return p, r, m
+
 • Exercise 9.5: Add properties to relationships.
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Tom Hanks' AND m.title = 'Forrest Gump'
+CREATE (a)-[rel:ACTED_IN]->(m)
+SET rel.roles = 'Forrest Gum'
+RETURN a, m
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Robin Wright' AND m.title = 'Forrest Gump'
+CREATE (a)-[rel:ACTED_IN]->(m)
+SET rel.roles = 'Jenny Curran'
+RETURN a, m
+
+MATCH (a:Person), (m:Movie)
+WHERE a.name = 'Gary Sinise' AND m.title = 'Forrest Gump'
+CREATE (a)-[rel:ACTED_IN]->(m)
+SET rel.roles = 'Lieutenant Dan Taylor'
+RETURN a, m
+
 • Exercise 9.6: Add a property to the HELPED relationship.
+
+MATCH (p1:Person)-[rel:HELPED]->(p2:Person)
+WHERE p1.name = 'Tom Hanks' AND p2.name = 'Gary Sinise'
+SET rel.research = 'war history'
+
 • Exercise 9.7: View the current list of property keys in the graph.
+
+call db.propertyKeys
+
 • Exercise 9.8: View the current schema of the graph.
+
+CALL db.schema.visualization()
+
 • Exercise 9.9: Retrieve the names and roles for actors.
+
+MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie)
+WHERE m.title = 'Forrest Gump'
+RETURN p.name, rel.roles
+
 • Exercise 9.10: Retrieve information about any specific relationships.
+
+MATCH (p:Person)-[rel:HELPED]-(p2:Person)
+RETURN p, p2
+
 • Exercise 9.11: Modify a property of a relationship.
+
+MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie)
+WHERE m.title = 'Forrest Gump' AND p.name = 'Gary Sinise'
+SET rel.roles =['Lt. Dan Taylor']
+
 • Exercise 9.12: Remove a property from a relationship.
+
+MATCH (a:Person)-[rel:HELPED]->(p2:Person)
+WHERE a.name = 'Tom Hanks' AND p2.name = 'Gary Sinise'
+REMOVE rel.research
+RETURN a, rel, p2
+
 • Exercise 9.13: Confirm that your modifications were made to the graph.
+
+MATCH (p:Person)-[rel:ACTED_IN]->(m:Movie)
+WHERE m.title = 'Forrest Gump'
+return p, rel, m
 
 Exercício 10 – Deleting nodes and relationships
 Coloque os comandos utilizado em cada item a seguir:
 • Exercise 10.1: Delete a relationship.
+
+MATCH (a:Person)-[r:HELPED]-(p2:Person)
+DELETE r
+
 • Exercise 10.2: Confirm that the relationship has been deleted.
+
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE m.title = 'Forrest Gump'
+Return p, r, m
+
 • Exercise 10.3: Retrieve a movie and all of its relationships.
+
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE m.title = 'Forrest Gump'
+Return p, r, m
+
 • Exercise 10.4: Try deleting a node without detaching its relationships.
+
+Cannot delete node<171>, because it still has relationships. To delete this node, you must first delete its relationships.
+
 • Exercise 10.5: Delete a Movie node, along with its relationships.
+
+MATCH (m:Movie)
+WHERE m.title = 'Forrest Gump'
+DETACH DELETE m
+
 • Exercise 10.6: Confirm that the Movie node has been deleted.
+
+MATCH (m:Movie)
+WHERE m.title = 'Forrest Gump'
+RETURN  m
 
 
 
